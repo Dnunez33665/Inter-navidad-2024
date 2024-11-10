@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intercambio de Regalos</title>
+</head>
+<body>
+    <h1>Intercambio de Regalos</h1>
+    <label for="name">Ingresa tu nombre:</label>
+    <input type="text" id="name" placeholder="Nombre completo">
+    <label for="code">Código de acceso:</label>
+    <input type="text" id="code" placeholder="Código de acceso">
+    <button onclick="revealGift()">Ver a quién regalas</button>
+
+    <p id="result"></p>
+
+    <script>
+        const participants = [
+            "Gabriela Núñez", "Nicole Rojas", "Carolina Rojas", "María Rojas", "Armando Núñez", 
+            "Sara Núñez", "Kendall Chinchilla", "Douglas Núñez", "Andrea Molina", "Gaby Romero", 
+            "Ronald Núñez", "Mariel Núñez", "Ronaldo Núñez", "Adriana Núñez", "Marvin Avendaño", 
+            "Mariana Núñez", "Brandon Vargas", "Jorge Avendaño", "Elenia Saborio", "Carlos Núñez", 
+            "Jakeline Núñez", "Manuel Alvarado", "Julián Jiménez", "Edgar Madriz", "Nicole Jiménez"
+        ];
+
+        // Códigos de acceso personalizados
+        const accessCodes = {
+            "gabriela núñez": "GN752",
+            "nicole rojas": "NR528",
+            "carolina rojas": "CR931",
+            "maría rojas": "MR416",
+            "armando núñez": "AN329",
+            "sara núñez": "SN874",
+            "kendall chinchilla": "KC215",
+            "douglas núñez": "DN752",
+            "andrea molina": "AM391",
+            "gaby romero": "GR687",
+            "ronald núñez": "RN432",
+            "mariel núñez": "MN546",
+            "ronaldo núñez": "RN148",
+            "adriana núñez": "AN602",
+            "marvin avendaño": "MA210",
+            "mariana núñez": "MN793",
+            "brandon vargas": "BV135",
+            "jorge avendaño": "JA257",
+            "elenia saborio": "ES849",
+            "carlos núñez": "CN764",
+            "jakeline núñez": "JN913",
+            "manuel alvarado": "MA519",
+            "julián jiménez": "JJ304",
+            "edgar madriz": "EM158",
+            "nicole jiménez": "NJ629"
+        };
+
+        // Asignar al azar sin repetición y evitando asignaciones a uno mismo
+        function shuffle(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        let assignments = [...participants];
+        shuffle(assignments);
+
+        // Verificar y reasignar si alguien se asigna a sí mismo
+        for (let i = 0; i < participants.length; i++) {
+            if (participants[i] === assignments[i]) {
+                shuffle(assignments);
+                i = -1; // Reiniciar verificación
+            }
+        }
+
+        const giftAssignments = participants.reduce((acc, name, idx) => {
+            acc[name.toLowerCase()] = assignments[idx];
+            return acc;
+        }, {});
+
+        // Función para revelar a quién se le regala
+        function revealGift() {
+            const name = document.getElementById('name').value.toLowerCase();
+            const code = document.getElementById('code').value.toUpperCase();
+            const result = document.getElementById('result');
+
+            if (accessCodes[name] && accessCodes[name] === code) {
+                result.textContent = `Debes regalar a: ${giftAssignments[name]}`;
+            } else {
+                result.textContent = "Nombre o código incorrecto. Intenta nuevamente.";
+            }
+        }
+    </script>
+</body>
+</html>
